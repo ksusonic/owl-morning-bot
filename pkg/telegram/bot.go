@@ -8,6 +8,7 @@ import (
 
 type Bot struct {
 	bot *tgbotapi.BotAPI
+	cfg *Config
 }
 
 func NewBot(cfg *Config) Bot {
@@ -16,7 +17,7 @@ func NewBot(cfg *Config) Bot {
 		log.Panic(err)
 	}
 	bot.Debug = cfg.Bot.Debug
-	return Bot{bot: bot}
+	return Bot{bot: bot, cfg: cfg}
 }
 
 func (b *Bot) Start() {
@@ -37,6 +38,14 @@ func (b *Bot) Start() {
 
 		b.handleMessage(update.Message)
 	}
+}
+
+func (b *Bot) SendMessage(chatId int64, text string) error {
+	_, err := b.bot.Send(tgbotapi.NewMessage(chatId, text))
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (b *Bot) handleMessage(message *tgbotapi.Message) {
