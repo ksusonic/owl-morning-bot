@@ -3,6 +3,7 @@ package telegram
 import (
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
+	"log"
 )
 
 type Config struct {
@@ -11,17 +12,29 @@ type Config struct {
 		UseWebhook bool   `yaml:"use_webhook"`
 		WebhookUrl string `yaml:"webhook_url,omitempty"`
 	}
+	Scheduler Scheduler `yaml:"scheduler"`
+	Nlg       Nlg       `yaml:"nlg"`
 }
 
-func Load(path string) (*Config, error) {
+type Scheduler struct {
+	ChatId int64  `yaml:"chat_id"`
+	Time   string `yaml:"time"`
+}
+
+type Nlg struct {
+	GoodMorning []string `yaml:"good_morning"`
+	Images      []string `yaml:"images"`
+}
+
+func Load(path string) *Config {
 	var config = new(Config)
 	file, err := ioutil.ReadFile(path)
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
 	err = yaml.Unmarshal(file, config)
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
-	return config, nil
+	return config
 }

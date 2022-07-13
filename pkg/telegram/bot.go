@@ -3,6 +3,7 @@ package telegram
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"log"
+	"math/rand"
 	"os"
 )
 
@@ -40,11 +41,18 @@ func (b *Bot) Start() {
 	}
 }
 
-func (b *Bot) SendMessage(chatId int64, text string) error {
-	_, err := b.bot.Send(tgbotapi.NewMessage(chatId, text))
+func (b *Bot) SendScheduledMessage() error {
+	text := b.Nlg().GoodMorning[rand.Int()%len(b.Nlg().GoodMorning)]
+	_, err := b.bot.Send(tgbotapi.NewMessage(b.cfg.Scheduler.ChatId, text))
 	if err != nil {
 		return err
 	}
+	selectedImage := b.Nlg().Images[rand.Int()%len(b.Nlg().Images)]
+	_, err = b.bot.Send(tgbotapi.NewPhoto(b.cfg.Scheduler.ChatId, tgbotapi.FileURL(selectedImage)))
+	if err != nil {
+		log.Printf("Probably, bad image url: ")
+	}
+	log.Println("Sent:", text, "with image:", selectedImage)
 	return nil
 }
 
@@ -63,4 +71,12 @@ func (b *Bot) initUpdateChannel() tgbotapi.UpdatesChannel {
 	u.Timeout = 60
 
 	return b.bot.GetUpdatesChan(u)
+}
+
+func (b *Bot) ShConf() *Scheduler {
+	return &b.cfg.Scheduler
+}
+
+func (b *Bot) Nlg() *Nlg {
+	return &b.cfg.Nlg
 }

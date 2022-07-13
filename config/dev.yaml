@@ -1,3 +1,20 @@
 bot:
   debug: true
   use_webhook: false
+scheduler:
+  chat_id: 34912353
+  time: "02:42"
+nlg:
+  good_morning:
+    - "Самой милой красотке самого доброго утра 😎"
+    - "Хәерле иртэ!"
+    - "Доброе утро, Алсушка ^^ 💋💋💋"
+    - "Кто это у нас еще спит? Или не спит...\nДоброе утро!!!!!"
+    - "Опа, Алсундекс, это ты? Доброе утро! 💋🏄"
+
+  images:
+    - "https://i.mycdn.me/i?r=AyH4iRPQ2q0otWIFepML2LxRjFo4tAvR-WweiiLE_CLPYA"
+    - "https://i.pinimg.com/originals/1d/6f/c1/1d6fc18e48aab88f978a30da6592b3d4.jpg"
+    - "https://i.pinimg.com/564x/8e/09/31/8e0931c73721302a67b0f521ae936314.jpg"
+    - "https://photowords2.ru/pics_max/photowords_ru_8957.jpg"
+    - "https://klike.net/uploads/posts/2021-11/1637049855_3.jpg"
