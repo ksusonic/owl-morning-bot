@@ -1,0 +1,4 @@
+bot:
+  debug: false
+  use_webhook: true
+  webhook_url: "TODO"
