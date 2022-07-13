@@ -13,6 +13,4 @@ WORKDIR /root/
 COPY --from=0 /github.com/ksusonic/owl-morning-bot/bin/bot .
 COPY --from=0 /github.com/ksusonic/owl-morning-bot/config config/
 
-EXPOSE 80
-
 CMD ["./bot"]
