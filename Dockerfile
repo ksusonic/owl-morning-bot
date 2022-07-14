@@ -7,6 +7,8 @@ RUN go mod download
 RUN go build -o ./bin/bot cmd/main.go
 
 FROM alpine:latest
+RUN apk update && apk add tzdata
+ENV TZ=Europe/Moscow
 
 WORKDIR /root/
 

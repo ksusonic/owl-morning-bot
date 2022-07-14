@@ -15,7 +15,7 @@ type Bot struct {
 func NewBot(cfg *Config) Bot {
 	bot, err := tgbotapi.NewBotAPI(os.Getenv("TELETOKEN"))
 	if err != nil {
-		log.Panic(err)
+		log.Panic("Check telegram token!\n", err)
 	}
 	bot.Debug = cfg.Bot.Debug
 	return Bot{bot: bot, cfg: cfg}
