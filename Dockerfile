@@ -15,4 +15,4 @@ WORKDIR /root/
 COPY --from=0 /github.com/ksusonic/owl-morning-bot/bin/bot .
 COPY --from=0 /github.com/ksusonic/owl-morning-bot/config config/
 
-CMD ["./bot"]
+CMD ["./bot", "-c", "config/prod.yaml"]
