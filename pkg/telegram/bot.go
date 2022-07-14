@@ -8,8 +8,8 @@ import (
 )
 
 type Bot struct {
-	bot *tgbotapi.BotAPI
-	cfg *Config
+	Bot *tgbotapi.BotAPI
+	Cfg *Config
 }
 
 func NewBot(cfg *Config) Bot {
@@ -18,11 +18,11 @@ func NewBot(cfg *Config) Bot {
 		log.Panic("Check telegram token!\n", err)
 	}
 	bot.Debug = cfg.Bot.Debug
-	return Bot{bot: bot, cfg: cfg}
+	return Bot{Bot: bot, Cfg: cfg}
 }
 
 func (b *Bot) Start() {
-	log.Printf("Authorized on account %s", b.bot.Self.UserName)
+	log.Printf("Authorized on account %s", b.Bot.Self.UserName)
 
 	for update := range b.initUpdateChannel() {
 		if update.Message == nil {
@@ -42,13 +42,13 @@ func (b *Bot) Start() {
 }
 
 func (b *Bot) SendScheduledMessage() error {
-	text := b.Nlg().GoodMorning[rand.Int()%len(b.Nlg().GoodMorning)]
-	_, err := b.bot.Send(tgbotapi.NewMessage(b.cfg.Scheduler.ChatId, text))
+	text := b.Cfg.Nlg.GoodMorning[rand.Int()%len(b.Cfg.Nlg.GoodMorning)]
+	_, err := b.Bot.Send(tgbotapi.NewMessage(b.Cfg.Scheduler.ChatId, text))
 	if err != nil {
 		return err
 	}
-	selectedImage := b.Nlg().Images[rand.Int()%len(b.Nlg().Images)]
-	_, err = b.bot.Send(tgbotapi.NewPhoto(b.cfg.Scheduler.ChatId, tgbotapi.FileURL(selectedImage)))
+	selectedImage := b.Cfg.Nlg.Images[rand.Int()%len(b.Cfg.Nlg.Images)]
+	_, err = b.Bot.Send(tgbotapi.NewPhoto(b.Cfg.Scheduler.ChatId, tgbotapi.FileURL(selectedImage)))
 	if err != nil {
 		log.Printf("Probably, bad image url: ")
 	}
@@ -60,7 +60,7 @@ func (b *Bot) handleMessage(message *tgbotapi.Message) {
 	log.Printf("[%s] %s", message.From.UserName, message.Text)
 
 	msg := tgbotapi.NewMessage(message.Chat.ID, message.Text)
-	_, err := b.bot.Send(msg)
+	_, err := b.Bot.Send(msg)
 	if err != nil {
 		log.Println(err)
 	}
@@ -70,13 +70,5 @@ func (b *Bot) initUpdateChannel() tgbotapi.UpdatesChannel {
 	u := tgbotapi.NewUpdate(0)
 	u.Timeout = 60
 
-	return b.bot.GetUpdatesChan(u)
-}
-
-func (b *Bot) ShConf() *Scheduler {
-	return &b.cfg.Scheduler
-}
-
-func (b *Bot) Nlg() *Nlg {
-	return &b.cfg.Nlg
+	return b.Bot.GetUpdatesChan(u)
 }

@@ -22,5 +22,5 @@ func (b *Bot) handleCommand(message *tgbotapi.Message) (tgbotapi.Message, error)
 		msg.Text = strconv.FormatInt(message.Chat.ID, 10)
 	}
 
-	return b.bot.Send(msg)
+	return b.Bot.Send(msg)
 }

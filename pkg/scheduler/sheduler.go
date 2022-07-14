@@ -10,7 +10,7 @@ import (
 func MakeCronTasks(b *telegram.Bot) {
 	location, _ := time.LoadLocation("Europe/Moscow")
 	s := gocron.NewScheduler(location)
-	_, err := s.Every(1).Day().At(b.ShConf().Time).Do(func() {
+	_, err := s.Every(1).Day().At(b.Cfg.Scheduler.Time).Do(func() {
 		if err := b.SendScheduledMessage(); err != nil {
 			log.Println("Error sending scheduled message: ", err)
 		}
