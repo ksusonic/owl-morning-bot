@@ -11,7 +11,11 @@ func main() {
 	flag.Parse()
 
 	cfg := telegram.Load(*configPathPtr)
+
 	teleBot := telegram.NewBot(cfg)
-	go scheduler.MakeCronTasks(&teleBot)
+
+	cronScheduler := scheduler.NewScheduler(&cfg.Scheduler)
+	go cronScheduler.MakeCronTasks(teleBot.Bot)
+
 	teleBot.Start()
 }
