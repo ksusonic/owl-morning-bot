@@ -2,7 +2,7 @@ package test
 
 import (
 	"encoding/json"
-	"github.com/ksusonic/owl-morning-bot/pkg/ya_weather"
+	"github.com/ksusonic/owl-morning-bot/pkg/weather/ya_weather"
 	"io/ioutil"
 	"os"
 	"testing"
