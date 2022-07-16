@@ -8,19 +8,23 @@ import (
 )
 
 type Scheduler struct {
-	ChatId   int64         `yaml:"chat_id"`
-	Time     string        `yaml:"time"`
-	Location time.Location `yaml:"location"`
+	ChatId   int64  `yaml:"chat_id"`
+	Time     string `yaml:"time"`
+	Location string `yaml:"location"`
 
 	Cron *gocron.Scheduler `yaml:"-"`
 }
 
 func NewScheduler(shedConf *Scheduler) *Scheduler {
+	location, err := time.LoadLocation(shedConf.Location)
+	if err != nil {
+		log.Fatal("Incorrect location in config!")
+	}
 	return &Scheduler{
 		ChatId:   shedConf.ChatId,
 		Time:     shedConf.Time,
 		Location: shedConf.Location,
-		Cron:     gocron.NewScheduler(&shedConf.Location),
+		Cron:     gocron.NewScheduler(location),
 	}
 }
 
