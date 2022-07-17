@@ -6,3 +6,6 @@ scheduler:
   chat_id: 334421172
   time: "12:00"
   location: "Europe/Moscow"
+ya_weather:
+  url: "https://api.weather.yandex.ru/v2/forecast"
+  lang: "ru_RU"

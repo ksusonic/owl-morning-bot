@@ -3,13 +3,15 @@ package telegram
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/ksusonic/owl-morning-bot/config"
+	"github.com/ksusonic/owl-morning-bot/pkg/weather/ya_weather"
 	"log"
 	"os"
 )
 
 type Bot struct {
-	Bot *tgbotapi.BotAPI
-	Cfg *config.Config
+	Bot       *tgbotapi.BotAPI
+	Cfg       *config.Config
+	YaWeather *ya_weather.YaWeatherClient
 }
 
 func NewBot(cfg *config.Config) Bot {
@@ -17,8 +19,10 @@ func NewBot(cfg *config.Config) Bot {
 	if err != nil {
 		log.Panic("Check telegram token!\n", err)
 	}
+	yaWeather := ya_weather.NewYaWeatherClient(&cfg.YaWeather)
+
 	bot.Debug = cfg.Bot.Debug
-	return Bot{Bot: bot, Cfg: cfg}
+	return Bot{Bot: bot, Cfg: cfg, YaWeather: yaWeather}
 }
 
 func (b *Bot) Start() {

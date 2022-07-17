@@ -10,12 +10,20 @@ import (
 )
 
 type Config struct {
-	Bot struct {
-		Debug      bool   `yaml:"debug"`
-		UseWebhook bool   `yaml:"use_webhook"`
-		WebhookUrl string `yaml:"webhook_url,omitempty"`
-	}
+	Bot       BotConfig           `yaml:"bot"`
 	Scheduler scheduler.Scheduler `yaml:"scheduler"`
+	YaWeather YaWeatherConfig     `yaml:"ya_weather"`
+}
+
+type BotConfig struct {
+	Debug      bool   `yaml:"debug"`
+	UseWebhook bool   `yaml:"use_webhook"`
+	WebhookUrl string `yaml:"webhook_url,omitempty"`
+}
+
+type YaWeatherConfig struct {
+	Url  string `yaml:"url"`
+	Lang string `yaml:"lang"`
 }
 
 func Load(path string) *Config {
