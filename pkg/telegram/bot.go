@@ -2,16 +2,17 @@ package telegram
 
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/ksusonic/owl-morning-bot/config"
 	"log"
 	"os"
 )
 
 type Bot struct {
 	Bot *tgbotapi.BotAPI
-	Cfg *Config
+	Cfg *config.Config
 }
 
-func NewBot(cfg *Config) Bot {
+func NewBot(cfg *config.Config) Bot {
 	bot, err := tgbotapi.NewBotAPI(os.Getenv("TELETOKEN"))
 	if err != nil {
 		log.Panic("Check telegram token!\n", err)

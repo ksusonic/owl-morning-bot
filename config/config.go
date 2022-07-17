@@ -1,0 +1,54 @@
+package config
+
+import (
+	"fmt"
+	"github.com/ksusonic/owl-morning-bot/pkg/scheduler"
+	"gopkg.in/yaml.v3"
+	"io/ioutil"
+	"log"
+	"time"
+)
+
+type Config struct {
+	Bot struct {
+		Debug      bool   `yaml:"debug"`
+		UseWebhook bool   `yaml:"use_webhook"`
+		WebhookUrl string `yaml:"webhook_url,omitempty"`
+	}
+	Scheduler scheduler.Scheduler `yaml:"scheduler"`
+}
+
+func Load(path string) *Config {
+	var config = new(Config)
+	file, err := ioutil.ReadFile(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = yaml.Unmarshal(file, config)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err := Validate(config); err != nil {
+		log.Fatal(err)
+	}
+	return config
+}
+
+func Validate(c *Config) error {
+	// Bot config check
+	if c.Bot.UseWebhook == true && c.Bot.WebhookUrl == "" {
+		return fmt.Errorf("use webhook is true and url is empty")
+	}
+	// Scheduler config check
+	if _, err := time.LoadLocation(c.Scheduler.Location); err != nil {
+		return err
+	}
+	if incorrectTime := c.Scheduler.Time == ""; incorrectTime || c.Scheduler.ChatId == 0 {
+		if incorrectTime {
+			return fmt.Errorf("incorrect time format in scheduler config")
+		} else {
+			return fmt.Errorf("incorrect chatId in scheduler config")
+		}
+	}
+	return nil
+}
