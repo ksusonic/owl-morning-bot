@@ -26,38 +26,52 @@ func NewYaWeatherClient(c *config.YaWeatherConfig) *YaWeatherClient {
 	return &YaWeatherClient{ApiToken: token, URL: c.Url, Lang: c.Lang}
 }
 
-func (c *YaWeatherClient) Request(city *weather.City) string {
+func (c *YaWeatherClient) Request(city weather.City) string {
 	request := c.makeRequest(city)
 	res, err := http.DefaultClient.Do(request)
 	if err != nil {
 		log.Printf("ya_weather_client: could not request weather: %s\n", err)
+		return ""
 	}
+
+	resBody, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Printf("ya_weather_client: could not read response body: %s\n", err)
+		return ""
+	}
+
+	if res.StatusCode != 200 {
+		log.Printf("ya_weather_client: status is %d: %s\n", res.StatusCode, resBody)
+		return ""
+	}
+
+	log.Printf("successful response: %s\n", resBody)
 
 	parsed, err := c.parseResponse(res)
 	if err != nil {
 		log.Printf("ya_weather_client: could not parse weather: %s\n", err)
+		return ""
 	}
 
 	return c.readableResponse(parsed, city)
 }
 
-func (c *YaWeatherClient) makeRequest(city *weather.City) *http.Request {
+func (c *YaWeatherClient) makeRequest(city weather.City) *http.Request {
 	req, err := http.NewRequest("GET", c.URL, nil)
 	if err != nil {
 		log.Println(err)
 	}
 
-	req.Header.Add("Accept", "application/json")
 	req.Header.Add("X-Yandex-API-Key", c.ApiToken)
 
 	q := req.URL.Query()
-	q.Add("lat", (*city).Lat())
-	q.Add("lon", (*city).Lon())
+	q.Add("lat", city.Lat())
+	q.Add("lon", city.Lon())
 	q.Add("lang", c.Lang)
 	q.Add("limit", "1")
 
 	req.URL.RawQuery = q.Encode()
-	log.Printf("request ready: %s\n", req.URL.RawQuery)
+	log.Printf("request ready: %s\n", req.URL)
 	return req
 }
 
@@ -75,12 +89,12 @@ func (c *YaWeatherClient) parseResponse(res *http.Response) (*YaWeatherResponse,
 	return &response, nil
 }
 
-func (c *YaWeatherClient) readableResponse(res *YaWeatherResponse, city *weather.City) string {
+func (c *YaWeatherClient) readableResponse(res *YaWeatherResponse, city weather.City) string {
 	var builder strings.Builder
 	builder.WriteString(
 		fmt.Sprintf(
 			"Сейчас в %s %d градусов, %s. Ветер %dм/с\n",
-			(*city).NameIn(),
+			city.NameIn(),
 			res.Fact.Temp,
 			conditionParser(res.Fact.Condition),
 			res.Fact.WindSpeed,
