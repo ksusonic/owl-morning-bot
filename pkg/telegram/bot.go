@@ -9,6 +9,7 @@ import (
 )
 
 type Bot struct {
+	Version   string
 	Bot       *tgbotapi.BotAPI
 	Cfg       *config.Config
 	YaWeather *ya_weather.YaWeatherClient
@@ -22,7 +23,7 @@ func NewBot(cfg *config.Config) Bot {
 	yaWeather := ya_weather.NewYaWeatherClient(&cfg.YaWeather)
 
 	bot.Debug = cfg.Bot.Debug
-	return Bot{Bot: bot, Cfg: cfg, YaWeather: yaWeather}
+	return Bot{Bot: bot, Cfg: cfg, YaWeather: yaWeather, Version: cfg.Bot.Version}
 }
 
 func (b *Bot) Start() {

@@ -15,6 +15,7 @@ type Config struct {
 }
 
 type BotConfig struct {
+	Version    string `yaml:"version"`
 	Debug      bool   `yaml:"debug"`
 	UseWebhook bool   `yaml:"use_webhook"`
 	WebhookUrl string `yaml:"webhook_url,omitempty"`

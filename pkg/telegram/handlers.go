@@ -1,6 +1,7 @@
 package telegram
 
 import (
+	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"strconv"
 )
@@ -17,7 +18,7 @@ func (b *Bot) handleCommand(message *tgbotapi.Message) (tgbotapi.Message, error)
 	case start:
 		msg.Text = "Здарова! Если есть вопросы, пиши @ksusonic"
 	case ping:
-		msg.Text = "pong 🏓"
+		msg.Text = fmt.Sprintf("pong v%s 🏓", b.Version)
 	case pwd:
 		msg.Text = strconv.FormatInt(message.Chat.ID, 10)
 	}
