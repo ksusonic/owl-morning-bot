@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"github.com/ksusonic/owl-morning-bot/pkg/scheduler"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"log"
@@ -10,12 +9,27 @@ import (
 )
 
 type Config struct {
-	Bot struct {
-		Debug      bool   `yaml:"debug"`
-		UseWebhook bool   `yaml:"use_webhook"`
-		WebhookUrl string `yaml:"webhook_url,omitempty"`
-	}
-	Scheduler scheduler.Scheduler `yaml:"scheduler"`
+	Bot       BotConfig       `yaml:"bot"`
+	Scheduler SchedulerConfig `yaml:"scheduler"`
+	YaWeather YaWeatherConfig `yaml:"ya_weather"`
+}
+
+type BotConfig struct {
+	Version    string `yaml:"version"`
+	Debug      bool   `yaml:"debug"`
+	UseWebhook bool   `yaml:"use_webhook"`
+	WebhookUrl string `yaml:"webhook_url,omitempty"`
+}
+
+type SchedulerConfig struct {
+	ChatId   int64  `yaml:"chat_id"`
+	Time     string `yaml:"time"`
+	Location string `yaml:"location"`
+}
+
+type YaWeatherConfig struct {
+	Url  string `yaml:"url"`
+	Lang string `yaml:"lang"`
 }
 
 func Load(path string) *Config {

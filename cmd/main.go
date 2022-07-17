@@ -15,8 +15,8 @@ func main() {
 
 	teleBot := telegram.NewBot(cfg)
 
-	cronScheduler := scheduler.NewScheduler(&cfg.Scheduler)
-	go cronScheduler.MakeCronTasks(teleBot.Bot)
+	cronScheduler := scheduler.NewScheduler(cfg, teleBot.Bot)
+	go cronScheduler.MakeCronTasks()
 
 	teleBot.Start()
 }

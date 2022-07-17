@@ -1,4 +1,5 @@
 bot:
+  version: "0.3"
   debug: false
   use_webhook: false # TODO
   webhook_url: "TODO"
@@ -6,3 +7,6 @@ scheduler:
   chat_id: 334421172
   time: "12:00"
   location: "Europe/Moscow"
+ya_weather:
+  url: "https://api.weather.yandex.ru/v2/forecast"
+  lang: "ru_RU"

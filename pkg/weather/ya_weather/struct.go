@@ -91,8 +91,9 @@ type YaWeatherResponse struct {
 				Cloudness    float64 `json:"cloudness"`
 			} `json:"evening"`
 			DayShort struct {
-				Temp         int     `json:"temp"`
 				TempMin      int     `json:"temp_min"`
+				TempMax      int     `json:"temp_max"`
+				TempAvg      int     `json:"temp_avg"`
 				FeelsLike    int     `json:"feels_like"`
 				Icon         string  `json:"icon"`
 				Condition    string  `json:"condition"`
@@ -107,7 +108,7 @@ type YaWeatherResponse struct {
 				Cloudness    int     `json:"cloudness"`
 			} `json:"day_short"`
 			NightShort struct {
-				Temp         int     `json:"temp"`
+				TempAvg      int     `json:"temp_avg"`
 				FeelsLike    int     `json:"feels_like"`
 				Icon         string  `json:"icon"`
 				Condition    string  `json:"condition"`
